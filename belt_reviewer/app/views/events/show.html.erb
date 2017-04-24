@@ -1,0 +1,36 @@
+<h1><%= @event.name %></h1>
+
+<h5>Host: <%= @event.user.first_name %></h5>
+<h5>Date: <%= @event.date.strftime("%B %d, %Y") %></h5>
+<h5>Location: <%= @event.location %>, <%= @event.state %></h5>
+<h5>People attending: <%= @event.attendees.count %></h5>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>State</th>
+    </tr>
+<% @event.attendees.each do |attendee| %>
+    <tr>
+        <td><%= attendee.user.first_name %> <%= attendee.user.last_name %></td>
+        <td><%= attendee.user.location %></td>
+        <td><%= attendee.user.state %></td>
+    </tr>
+    <% end %>
+</table>
+
+<h2>Discussion about this event:</h2>
+
+<% @comments.each do |comment| %>
+    <p><%= comment.user.first_name %> says: <%= comment.content %></p>
+    ---------------------------------------------
+<% end %>
+
+<h4>Add Comment:</h4>
+<form action="/comments" method="POST">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="hidden" name="comment[event_id]" value="<%= @event.id %>">
+    <input type="text" name="comment[content]">
+    <input type="submit" value="Submit Comment">
+</form>

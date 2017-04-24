@@ -1,0 +1,82 @@
+<h1>Welcome, <%= current_user.first_name %>!</h1>
+
+<h3>Local Events</h3>
+
+ <table>
+     <tr>
+         <th>Name</th>
+         <th>Date</th>
+         <th>Location</th>
+         <th>Host</th>
+         <th>Action/Status</th>
+     </tr>
+     <% @local_events.each do |event| %>
+     <tr>
+         <td><a href="/events/<%= event.id %>"><%= event.name %></a></td>
+         <td><%= event.date.strftime("%B %d, %Y") %></td>
+         <td><%= event.location %></td>
+         <td><%= event.user.first_name %></td>
+         <td>
+             <% if current_user.id == event.user.id %>
+                 <form action="/events/<%= event.id %>" method="POST">
+                    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                    <input type="hidden" name="_method" value="delete">
+                    <input type="submit" value="Delete">
+                 </form>
+             <% else %>
+                 <% if event.users.include?(current_user) %>
+                 <form action="/atte<%ndees/<%= event.id %>" method="POST">
+                    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                    <input type="hidden" name="_method" value="delete">
+                    <input type="hidden" name="attendee[event_id]" value="<%= event.id %>">
+                    <input type="submit" value="Cancel">
+                 </form>
+                <% else %>
+                 <form action="/attendees/" method="POST">
+                    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                    <input type="hidden" name="attendee[event_id]" value="<%= event.id %>">
+                    <input type="submit" value="Join">
+                 </form>
+             <% end %>
+        <% end %>
+         </td>
+         <td></td>
+     </tr>
+ </table>
+ <% end %>
+ 
+ <h3>Other Events</h3>
+  <table>
+     <tr>
+         <th>Name</th>
+         <th>Date</th>
+         <th>Location</th>
+         <th>Host</th>
+         <th>Action/Status</th>
+     </tr>
+     <% @other_events.each do |event| %>
+     <tr>
+         <td><a href="/events/<%= event.id %>"><%= event.name %></a></td>
+         <td><%= event.date.strftime("%B %d, %Y") %></td>
+         <td><%= event.location %></td>
+         <td><%= event.user.first_name %></td>
+         <td></td>
+     </tr>
+ </table>
+ <% end %>
+ 
+ <h3>Add Event</h3>
+
+<form action="/events" method="POST">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    Name: <input type="text" name="event[name]">
+    Date: <input type="date" name="event[date]">
+    Location: <input type="text" name="event[location">
+    State: <select name="event[state]">
+        <option value="CA">CA</option>
+        <option value="WA">WA</option>
+        <option value="NY">NY</option>
+        <option value="MA">MA</option>
+    </select>
+    <input type="submit" label="Add Event">
+</form> 

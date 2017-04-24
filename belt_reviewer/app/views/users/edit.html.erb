@@ -1,0 +1,19 @@
+<h1>Edit <%= @user.first_name %> <%= @user.last_name %></h1>
+
+<form action="/users/<%= @user.id %>" method="POST">
+    <input type="hidden" name="_method" value="patch">
+    <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+    First Name: <input type="text" name="user[first_name]" value="<%= @user.first_name %>">
+    Last Name: <input type="text" name="user[last_name]" value="<%= @user.last_name %>">
+    Location: <input type="text" name="user[location]" value="<%= @user.location %>">
+    State: <select name="user[state]" value="<%= @user.state %>">
+        <option value="CA">CA</option>
+        <option value="WA">WA</option>
+        <option value="NY">NY</option>
+        <option value="MA">MA</option>
+    </select>
+    Email: <input type="text" name="user[email]" value="<%= @user.email %>">
+    Password:<input type="password" name="user[password]">
+    Password Confirmation:<input type="password" name="user[password_confirmation]">
+    <input type=submit label="Update User">
+</form>
